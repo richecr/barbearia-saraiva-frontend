@@ -39,6 +39,10 @@ export class RegisterStore {
       cbFail(error_response?.data.message || '');
     }
   }
+
+  clear() {
+    this.user.reset();
+  }
 }
 
 export default new RegisterStore();

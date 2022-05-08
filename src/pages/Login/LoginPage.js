@@ -42,6 +42,10 @@ const LoginPage = observer((props) => {
     }
   });
 
+  useEffect(() => {
+    return () => LoginStore.clear();
+  }, []);
+
   return (
     <>
       <Grid

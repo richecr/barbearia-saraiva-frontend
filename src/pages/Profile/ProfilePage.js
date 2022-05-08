@@ -17,6 +17,10 @@ const ProfilePage = observer(() => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    return () => ProfileStore.clear();
+  }, []);
+
   async function onFinish() {
     await ProfileStore.update(
       () => {

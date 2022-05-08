@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
@@ -18,6 +18,10 @@ import photoLogin from '../../assets/logo.png';
 const RegisterPage = observer(() => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    return () => RegisterStore.clear();
+  }, []);
 
   async function onFinish(e) {
     e.preventDefault();

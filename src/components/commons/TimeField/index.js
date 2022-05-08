@@ -1,7 +1,6 @@
 import { TextField } from '@mui/material';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
-// import { LocalizationProvider, TimePicker } from '@mui/lab';
 
 const TimeField = ({
   label,
@@ -17,8 +16,9 @@ const TimeField = ({
   onBlur
 }) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
+    <LocalizationProvider dateAdapter={AdapterMoment} locale="pt">
       <TimePicker
+        ampm={false}
         label={label}
         value={value}
         minTime={minTime}

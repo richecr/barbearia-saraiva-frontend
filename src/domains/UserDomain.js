@@ -32,6 +32,18 @@ class UserDomain extends DomainBase {
     user_backend.telephone = formatFieldPhone(this.telephone);
     return user_backend;
   }
+
+  reset() {
+    this.name = '';
+    this.email = '';
+    this.birthday = '';
+    this.telephone = '';
+    this.password = '';
+    this.confirmPassword = '';
+    this.notification_email = true;
+    this.notification_whatsapp = true;
+    this.resetErrors();
+  }
 }
 
 export default UserDomain;

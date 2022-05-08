@@ -14,6 +14,10 @@ class LoginStore {
   updateAttribute(attribute, value) {
     this.user_login[attribute] = value;
   }
+
+  clear() {
+    this.user_login.reset();
+  }
 }
 
 export default new LoginStore();

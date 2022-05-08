@@ -30,6 +30,10 @@ class DomainBase {
   getBackendObject() {
     return this.errors;
   }
+
+  resetErrors() {
+    this.errors = {};
+  }
 }
 
 export default DomainBase;

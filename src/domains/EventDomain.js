@@ -39,6 +39,7 @@ class EventDomain extends DomainBase {
     this.service = null;
     this.date_start = null;
     this.time_start = null;
+    this.resetErrors();
   }
 }
 

@@ -7,6 +7,11 @@ class LoginDomain {
   constructor() {
     makeAutoObservable(this);
   }
+
+  reset() {
+    this.email = '';
+    this.password = '';
+  }
 }
 
 export default LoginDomain;
