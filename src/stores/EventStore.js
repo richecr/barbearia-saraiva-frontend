@@ -4,6 +4,7 @@ import { configure, makeObservable, observable, runInAction } from 'mobx';
 import IndexStore from './IndexStore';
 import EventDomain from '../domains/EventDomain';
 import EventService from '../services/EventService';
+import ClientService from '../services/ClientService';
 import ScheduleService from '../services/ScheduleService';
 import TypeOperationService from '../services/TypeOperationService';
 
@@ -20,6 +21,7 @@ class EventStore extends IndexStore {
   schedules = [];
   types_services = [];
   schedules_free = [];
+  clients = [];
 
   constructor() {
     super();
@@ -27,7 +29,8 @@ class EventStore extends IndexStore {
       options: observable,
       schedules: observable,
       types_services: observable,
-      schedules_free: observable
+      schedules_free: observable,
+      clients: observable
     });
   }
 
@@ -48,6 +51,7 @@ class EventStore extends IndexStore {
       const data = response.data;
       const service = this.types_services.filter((service) => service.label === data.type_service);
       runInAction(() => {
+        this.domain.user_id = data.user_id;
         this.domain.barber = data.schedule_id;
         this.domain.date_start = moment(new Date(data.date_hour_start));
         this.domain.time_start = moment.utc(this.domain.date_start).utcOffset(0);
@@ -111,6 +115,27 @@ class EventStore extends IndexStore {
     runInAction(() => {
       this.schedules_free = response.data;
     });
+  }
+
+  async findAllClients(cbSuccess = () => {}) {
+    try {
+      const response = await ClientService.findAll();
+      runInAction(() => {
+        let data = response.data;
+        this.clients = data.map((client) => {
+          return {
+            value: client.id,
+            label: client.name
+          };
+        });
+      });
+      if (cbSuccess) {
+        cbSuccess();
+      }
+    } catch (error) {
+      const error_response = error?.response;
+      console.error(error_response.data.message);
+    }
   }
 
   clear() {

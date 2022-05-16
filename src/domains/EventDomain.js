@@ -8,6 +8,7 @@ class EventDomain extends DomainBase {
   service = null;
   date_start = null;
   time_start = null;
+  user_id = null;
 
   constructor() {
     super();
@@ -28,7 +29,8 @@ class EventDomain extends DomainBase {
     const data = {
       schedule_id: this.barber,
       date_hour_start: date_time.toDate(),
-      type_service: Number(this.service)
+      type_service: Number(this.service),
+      user_id: this.user_id
     };
 
     return data;
@@ -39,6 +41,7 @@ class EventDomain extends DomainBase {
     this.service = null;
     this.date_start = null;
     this.time_start = null;
+    this.user_id = null;
     this.resetErrors();
   }
 }

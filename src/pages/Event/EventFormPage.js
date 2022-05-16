@@ -6,15 +6,19 @@ import { observer } from 'mobx-react';
 
 import { Button } from '@mui/material';
 import Timeline from '@mui/lab/Timeline';
+import { makeStyles } from '@mui/styles';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem from '@mui/lab/TimelineItem';
 import { TimelineOppositeContent } from '@mui/lab';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 // stores and constants
 import EventStore from '../../stores/EventStore';
+
+import { useUserStore } from '../../providers/UserProvider';
 
 import Item from '../../components/commons/Item';
 import Dashboard from '../../components/Dashboard';
@@ -23,13 +27,25 @@ import DateField from '../../components/commons/DateField';
 import TimeField from '../../components/commons/TimeField';
 import SelectOptions from '../../components/commons/Select';
 
+const useStyles = makeStyles((theme) => ({
+  alert: {
+    display: 'flex',
+    marginBottom: '0.5rem',
+    color: theme.palette.primary.main,
+    alignItems: 'center'
+  }
+}));
+
 const EventsFormPage = observer(() => {
   let params = useParams();
+  const classes = useStyles();
+  const UserStore = useUserStore();
   const [showSchedules, setShowSchedules] = useState(false);
 
   useEffect(() => {
     EventStore.findAllSchedules();
     EventStore.findAllServices();
+    EventStore.findAllClients();
 
     return () => EventStore.clear();
   }, []);
@@ -71,6 +87,26 @@ const EventsFormPage = observer(() => {
         getById={async (id, cbFail) => await EventStore.findById(id, cbFail)}
         saveRegister={async (cbSuccess, cbFail) => EventStore.save(cbSuccess, cbFail)}
         updateRegister={async (id, cbSuccess, cbFail) => EventStore.update(id, cbSuccess, cbFail)}>
+        {UserStore.isAdmin && (
+          <>
+            <Item>
+              <span className={classes.alert}>
+                <ErrorOutlineIcon /> Para clientes não cadastro escolher a opção User Admin
+              </span>
+              <SelectOptions
+                required
+                label="Cliente"
+                options={EventStore.clients}
+                value={EventStore.domain.user_id}
+                placeholder="Selecione o cliente"
+                helperText={EventStore.domain.errors.user_id}
+                onBlur={(e) => EventStore.domain.validate('user_id')}
+                error={EventStore.domain.errors.user_id ? true : false}
+                onChange={(e) => EventStore.updateAttribute('user_id', e.target.value)}
+              />
+            </Item>
+          </>
+        )}
         <Item>
           <DateField
             required
