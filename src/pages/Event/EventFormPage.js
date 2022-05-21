@@ -26,6 +26,7 @@ import FormIndex from '../../components/commons/Form';
 import DateField from '../../components/commons/DateField';
 import TimeField from '../../components/commons/TimeField';
 import SelectOptions from '../../components/commons/Select';
+import ConfigUtilsStore from '../../stores/ConfigUtilsStore';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -46,6 +47,7 @@ const EventsFormPage = observer(() => {
     EventStore.findAllSchedules();
     EventStore.findAllServices();
     EventStore.findAllClients();
+    UserStore.getUser();
 
     return () => EventStore.clear();
   }, []);
@@ -91,7 +93,7 @@ const EventsFormPage = observer(() => {
           <>
             <Item>
               <span className={classes.alert}>
-                <ErrorOutlineIcon /> Para clientes não cadastro escolher a opção User Admin
+                <ErrorOutlineIcon /> Para clientes não cadastrados, escolher a opção User Admin
               </span>
               <SelectOptions
                 required
@@ -179,6 +181,18 @@ const EventsFormPage = observer(() => {
             error={EventStore.domain.errors.time_start ? true : false}
             onChange={(e) => EventStore.updateAttribute('time_start', e)}
           />
+        </Item>
+
+        <Item>
+          <span className={classes.alert}>
+            <ErrorOutlineIcon />
+            {UserStore.profile.services_current + 1 ==
+            ConfigUtilsStore.configs.qnt_services_to_discount
+              ? ' Você terá um desconto nesse serviço!'
+              : ` Este é o serviço ${UserStore.profile.services_current + 1}/${
+                  ConfigUtilsStore.configs.qnt_services_to_discount
+                } para ganhar um descontinho!`}
+          </span>
         </Item>
       </FormIndex>
     </Dashboard>

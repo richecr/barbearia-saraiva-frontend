@@ -14,6 +14,7 @@ class EventDomain extends DomainBase {
     super();
     makeObservable(this, {
       barber: observable,
+      user_id: observable,
       service: observable,
       date_start: observable,
       time_start: observable,

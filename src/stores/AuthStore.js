@@ -3,6 +3,7 @@ import { action, makeAutoObservable, runInAction } from 'mobx';
 import AuthService from '../services/AuthService';
 import LoginService from '../services/LoginService';
 import ProfileService from '../services/ProfileService';
+import ConfigUtilsService from '../services/ConfigUtilsService';
 
 /**
  * Classe responsável por verificar autenticação do usuário.
@@ -34,7 +35,12 @@ class AuthStore {
   async getUser() {
     try {
       const response = await ProfileService.get();
-      runInAction(() => (this.profile = response.data));
+      const configs = await ConfigUtilsService.get();
+      runInAction(() => {
+        this.profile = response.data;
+        this.profile.services_current =
+          this.profile.number_services % configs.data.qnt_services_to_discount;
+      });
     } catch (error) {
       console.error('Algum erro ocorreu!');
     }
