@@ -3,6 +3,7 @@ import { action, makeAutoObservable, runInAction } from 'mobx';
 import AuthService from '../services/AuthService';
 import LoginService from '../services/LoginService';
 import ProfileService from '../services/ProfileService';
+import RegisterService from '../services/RegisterService';
 import ConfigUtilsService from '../services/ConfigUtilsService';
 
 /**
@@ -32,9 +33,15 @@ class AuthStore {
     }
   }
 
-  async getUser() {
+  async getUser(userId = null) {
     try {
-      const response = await ProfileService.get();
+      let response = {};
+      if (userId === null) {
+        response = await ProfileService.get();
+      } else {
+        response = await RegisterService.findById(userId);
+      }
+
       const configs = await ConfigUtilsService.get();
       runInAction(() => {
         this.profile = response.data;

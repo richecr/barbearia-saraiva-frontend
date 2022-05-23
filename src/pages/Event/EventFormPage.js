@@ -26,7 +26,7 @@ import FormIndex from '../../components/commons/Form';
 import DateField from '../../components/commons/DateField';
 import TimeField from '../../components/commons/TimeField';
 import SelectOptions from '../../components/commons/Select';
-import ConfigUtilsStore from '../../stores/ConfigUtilsStore';
+import CountServicesUser from '../../components/CountServicesUser';
 
 const useStyles = makeStyles((theme) => ({
   alert: {
@@ -104,7 +104,10 @@ const EventsFormPage = observer(() => {
                 helperText={EventStore.domain.errors.user_id}
                 onBlur={(e) => EventStore.domain.validate('user_id')}
                 error={EventStore.domain.errors.user_id ? true : false}
-                onChange={(e) => EventStore.updateAttribute('user_id', e.target.value)}
+                onChange={async (e) => {
+                  EventStore.updateAttribute('user_id', e.target.value);
+                  await UserStore.getUser(e.target.value);
+                }}
               />
             </Item>
           </>
@@ -183,17 +186,7 @@ const EventsFormPage = observer(() => {
           />
         </Item>
 
-        <Item>
-          <span className={classes.alert}>
-            <ErrorOutlineIcon />
-            {UserStore.profile.services_current + 1 ==
-            ConfigUtilsStore.configs.qnt_services_to_discount
-              ? ' Você terá um desconto nesse serviço!'
-              : ` Este é o serviço ${UserStore.profile.services_current + 1}/${
-                  ConfigUtilsStore.configs.qnt_services_to_discount
-                } para ganhar um descontinho!`}
-          </span>
-        </Item>
+        <CountServicesUser />
       </FormIndex>
     </Dashboard>
   );

@@ -15,7 +15,7 @@ const EventListPage = observer(() => {
   const { enqueueSnackbar } = useSnackbar();
   const columns = [
     {
-      width: 200,
+      width: 150,
       type: 'string',
       field: 'schedule',
       headerName: 'Nome do barbeiro',
@@ -23,7 +23,7 @@ const EventListPage = observer(() => {
       valueFormatter: ({ value }) => value.barber_name
     },
     {
-      width: 200,
+      width: 150,
       field: 'user',
       type: 'string',
       headerName: 'Nome do Cliente',
@@ -48,6 +48,12 @@ const EventListPage = observer(() => {
       width: 100,
       field: 'type_service',
       headerName: 'Serviço'
+    },
+    {
+      width: 100,
+      field: 'has_discount',
+      headerName: 'Tem Desconto?',
+      valueFormatter: ({ value }) => (value ? 'SIM' : 'NÃO')
     }
   ];
 
